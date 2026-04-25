@@ -34,7 +34,7 @@ export class GameScene extends Phaser.Scene {
         this.cat = new Cat(this, pX, pY, skin);
         this.vacuum = new Vacuum(this, vX, vY, vacKind);
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.wasd = this.input.keyboard.addKeys('W,A,S,D');
+        this.wasd = this.input.keyboard.addKeys({ up: 'W', down: 'S', left: 'A', right: 'D' });
         this.input.on('pointerdown', (p) => {
             if (this.over) {
                 this.restart();
