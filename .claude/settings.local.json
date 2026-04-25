@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s http://localhost:5173/src/main.ts -o /dev/null -w \"main.ts HTTP %{http_code}\\\\n\")",
+      "Bash(curl -s -o /tmp/main.js -w \"main.ts: %{http_code}\\\\n\" \"http://localhost:5173/src/main.ts\")",
+      "Bash(curl -s -o /tmp/game.js -w \"GameScene: %{http_code}\\\\n\" \"http://localhost:5173/src/scenes/GameScene.ts\")",
+      "Bash(curl -s -o /tmp/cat.js -w \"Cat: %{http_code}\\\\n\" \"http://localhost:5173/src/entities/Cat.ts\")",
+      "Bash(curl -s -o /tmp/vac.js -w \"Vacuum: %{http_code}\\\\n\" \"http://localhost:5173/src/entities/Vacuum.ts\")",
+      "Bash(curl -s -o /tmp/boot.js -w \"Boot: %{http_code}\\\\n\" \"http://localhost:5173/src/scenes/BootScene.ts\")",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(export PATH=\"/c/Users/ross_/AppData/Local/mise/installs/node/24.15.0:$PATH\")",
+      "Bash(npm run *)",
+      "Read(//c/Users/ross_/.claude/plugins/cache/claude-plugins-official/chrome-devtools-mcp/0.22.0/**)",
+      "Bash(node -e ' *)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(npx tsc *)",
+      "Bash(npx chrome-devtools-mcp@latest --help)",
+      "Bash(curl -s http://localhost:5173/@vite/client)",
+      "Bash(curl -s http://localhost:5173/src/main.ts)",
+      "Bash(curl -s http://localhost:5173/src/config.js)",
+      "Bash(curl -s http://localhost:5173/src/scenes/BootScene.js)"
+    ]
+  }
+}
