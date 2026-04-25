@@ -10,6 +10,7 @@ export class Vacuum extends Phaser.GameObjects.Sprite {
   private targetX = 0;
   private targetY = 0;
   private moving = false;
+  private scared = false;
 
   constructor(scene: Phaser.Scene, tileX: number, tileY: number, public kind: VacuumKind) {
     super(scene, tileX * TILE + TILE / 2, tileY * TILE + TILE / 2, `vacuum-${kind}`);
@@ -19,6 +20,11 @@ export class Vacuum extends Phaser.GameObjects.Sprite {
     this.targetX = this.x;
     this.targetY = this.y;
     this.setDepth(9);
+  }
+
+  setScared(scared: boolean) {
+    this.scared = scared;
+    this.setTexture(scared ? 'vacuum-scared' : `vacuum-${this.kind}`);
   }
 
   update(dt: number, grid: string[], targetTileX: number, targetTileY: number) {
@@ -39,7 +45,13 @@ export class Vacuum extends Phaser.GameObjects.Sprite {
     }
 
     const forbidden = OPPOSITE[this.dir];
-    let chosen = bfsNextDirection(grid, this.tileX, this.tileY, targetTileX, targetTileY, forbidden);
+    let chosen: Direction;
+
+    if (this.scared) {
+      chosen = this.fleeDirection(grid, targetTileX, targetTileY, forbidden);
+    } else {
+      chosen = bfsNextDirection(grid, this.tileX, this.tileY, targetTileX, targetTileY, forbidden);
+    }
 
     if (chosen === 'none') {
       const options: Direction[] = ['up', 'down', 'left', 'right'];
@@ -61,5 +73,22 @@ export class Vacuum extends Phaser.GameObjects.Sprite {
     this.targetX = this.tileX * TILE + TILE / 2;
     this.targetY = this.tileY * TILE + TILE / 2;
     this.moving = true;
+  }
+
+  // Pick the walkable direction that maximizes Manhattan distance from target
+  private fleeDirection(grid: string[], fromX: number, fromY: number, forbidden: Direction): Direction {
+    const options: Direction[] = ['up', 'down', 'left', 'right'];
+    let bestDir: Direction = 'none';
+    let bestDist = -1;
+    for (const d of options) {
+      if (d === forbidden) continue;
+      const [dx, dy] = DIR_VECTORS[d];
+      const nx = this.tileX + dx;
+      const ny = this.tileY + dy;
+      if (!isWalkable(grid, nx, ny)) continue;
+      const dist = Math.abs(nx - fromX) + Math.abs(ny - fromY);
+      if (dist > bestDist) { bestDist = dist; bestDir = d; }
+    }
+    return bestDir;
   }
 }

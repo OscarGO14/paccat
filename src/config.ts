@@ -1,23 +1,29 @@
 export const TILE = 32;
 
 export const COLORS = {
-  bg: 0x000010,
-  wall: 0x1a1aff,
-  wallEdge: 0x6a6aff,
-  food: 0xf4d06f,
-  catMapa: 0xd99a4a,
-  catMapaDark: 0x8a5a2b,
-  catLilith: 0x222222,
-  catLilithEye: 0xa6f06b,
-  vacuumBody: 0x9aa0a6,
-  vacuumDark: 0x5f6368,
-  vacuumLight: 0xff5252,
+  bg:           0x1c1330,
+  bgDeep:       0x120a23,
+  wall:         0x3ad6a3,
+  wallEdge:     0x1f8c6a,
+  wallGlow:     0x7cf5c8,
+  food:         0xff8a5c,
+  foodPower:    0xff6fa8,
+  catMapa:      0xfbf6ee,
+  catMapaDark:  0x1a1622,
+  catMapaEye:   0xffd45c,
+  catLilith:    0x1a1622,
+  catLilithEye: 0xb6ff5e,
+  vacuumBody:   0xff8a5c,
+  vacuumDark:   0x3a2a3f,
+  vacuumLight:  0xff5470,
 };
 
 export const SPEED = {
   cat: 110,
   vacuum: 90,
 };
+
+export const POWER_DURATION = 6000;
 
 // Maze legend:
 //   # = wall
@@ -45,3 +51,6 @@ export const MAZE: string[] = [
 
 export const MAZE_COLS = MAZE[0].length;
 export const MAZE_ROWS = MAZE.length;
+
+// Tuna-can power pellets at the four corners of the play area
+export const POWER_TILES = new Set(['1,1', '13,1', '1,13', '13,13']);
