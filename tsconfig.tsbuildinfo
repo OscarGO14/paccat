@@ -1,0 +1,1 @@
+{"root":["./src/config.ts","./src/main.ts","./src/types.ts","./src/ai/chase.ts","./src/entities/cat.ts","./src/entities/vacuum.ts","./src/scenes/bootscene.ts","./src/scenes/gamescene.ts","./src/scenes/hudscene.ts"],"version":"5.9.3"}

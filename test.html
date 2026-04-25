@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Debug Game</title>
+  <style>
+    body { font-family: monospace; margin: 20px; }
+    #game { width: 100vw; height: 100vh; }
+    .log {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: black;
+      color: lime;
+      padding: 10px;
+      max-width: 400px;
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 9999;
+      border: 1px solid lime;
+    }
+  </style>
+</head>
+<body>
+  <div id="game"></div>
+  <div class="log" id="log"></div>
+
+  <script>
+    const logEl = document.getElementById('log');
+    const originalLog = console.log;
+    const originalError = console.error;
+
+    function addLog(msg, color = 'lime') {
+      const p = document.createElement('div');
+      p.style.color = color;
+      p.textContent = msg;
+      logEl.appendChild(p);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    console.log = (...args) => {
+      originalLog(...args);
+      addLog(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' '));
+    };
+
+    console.error = (...args) => {
+      originalError(...args);
+      addLog(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' '), 'red');
+    };
+
+    window.addEventListener('error', (e) => {
+      addLog(`ERROR: ${e.message} at ${e.filename}:${e.lineno}`, 'red');
+    });
+
+    addLog('Starting game...');
+  </script>
+  <script type="module" src="http://localhost:5173/src/main.ts"></script>
+</body>
+</html>
