@@ -79,24 +79,24 @@ export const MAZE_2: string[] = [
 export const POWER_TILES_2 = new Set(['1,1', '13,1', '1,13', '13,13']);
 
 // ── Level 3 ─────────────────────────────────────────────────────────
-// The Labyrinth Chambers: Vertical segmented design with multiple
-// interconnected rooms. Asymmetric right side creates unpredictable
-// vacuum behavior. Three escape corridors (left, top-center, right edges).
+// Redesigned: Vertical segmented chambers (top/middle/bottom) with
+// strategic vacuum control point. Three genuinely viable escape corridors
+// (left, top-center, right). No dead-end traps.
 export const MAZE_3: string[] = [
   '###############',
   '#P.....#......#',
+  '#.#.#..#......#',
+  '#...#..#.####.#',
+  '#####..#.#..#.#',
+  '#.....##.....#.',
   '#.#####.######.',
-  '#.....#.......#',
-  '#####.#.#####.#',
-  '#.....#.....#.#',
-  '#.#####.###.#.#',
-  '#.#...V.#.....#',
-  '#.#.###.#.#####',
-  '#...#...#.....#',
-  '#.#####.#####.#',
-  '#.....#.....#.#',
-  '#####.#.#####.#',
-  '#.....#.......#',
+  '#.#...#...#...#',
+  '#.#.###.#.#.###',
+  '#...#.#.#.....#',
+  '#.#.#.#V#####.#',
+  '#.#.#.#.....#.#',
+  '#...#.#.###.#.#',
+  '#.#########..#.',
   '###############',
 ];
 
