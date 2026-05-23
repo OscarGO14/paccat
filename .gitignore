@@ -2,3 +2,12 @@ dist
 .vite
 node_modules
 .antigravitycli
+tsconfig.tsbuildinfo
+.claude/worktrees/
+# root-level debug/verify scripts
+compare_mazes.js
+debug.js
+test_*.html
+test_*.js
+test_*.mjs
+verify_*.js
