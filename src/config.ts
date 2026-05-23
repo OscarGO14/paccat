@@ -54,3 +54,61 @@ export const MAZE_ROWS = MAZE.length;
 
 // Tuna-can power pellets at the four corners of the play area
 export const POWER_TILES = new Set(['1,1', '13,1', '1,13', '13,13']);
+
+// ── Level 2 ─────────────────────────────────────────────────────────
+// More open layout: two full horizontal corridors (rows 5 & 9)
+// and segmented center requiring detours — different feel to level 1.
+export const MAZE_2: string[] = [
+  '###############',
+  '#P.....#......#',
+  '#.###.#.#.###.#',
+  '#.#...#.#...#.#',
+  '#.#.###.###.#.#',
+  '#.............#',
+  '###.##.#.##.###',
+  '#...#..V..#...#',
+  '###.##.#.##.###',
+  '#.............#',
+  '#.#.###.###.#.#',
+  '#.#...#.#...#.#',
+  '#.###.#.#.###.#',
+  '#.....#.......#',
+  '###############',
+];
+
+export const POWER_TILES_2 = new Set(['1,1', '13,1', '1,13', '13,13']);
+
+// ── Level 3 ─────────────────────────────────────────────────────────
+// The Labyrinth Chambers: Vertical segmented design with multiple
+// interconnected rooms. Asymmetric right side creates unpredictable
+// vacuum behavior. Three escape corridors (left, top-center, right edges).
+export const MAZE_3: string[] = [
+  '###############',
+  '#P.....#......#',
+  '#.#####.######.',
+  '#.....#.......#',
+  '#####.#.#####.#',
+  '#.....#.....#.#',
+  '#.#####.###.#.#',
+  '#.#...V.#.....#',
+  '#.#.###.#.#####',
+  '#...#...#.....#',
+  '#.#####.#####.#',
+  '#.....#.....#.#',
+  '#####.#.#####.#',
+  '#.....#.......#',
+  '###############',
+];
+
+export const POWER_TILES_3 = new Set(['1,1', '13,1', '1,13', '13,13']);
+
+export interface LevelConfig {
+  maze: string[];
+  powerTiles: Set<string>;
+}
+
+export const LEVELS: LevelConfig[] = [
+  { maze: MAZE,   powerTiles: POWER_TILES },
+  { maze: MAZE_2, powerTiles: POWER_TILES_2 },
+  { maze: MAZE_3, powerTiles: POWER_TILES_3 },
+];

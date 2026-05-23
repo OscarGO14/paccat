@@ -20,7 +20,10 @@
       "Bash(curl -s http://localhost:5173/@vite/client)",
       "Bash(curl -s http://localhost:5173/src/main.ts)",
       "Bash(curl -s http://localhost:5173/src/config.js)",
-      "Bash(curl -s http://localhost:5173/src/scenes/BootScene.js)"
+      "Bash(curl -s http://localhost:5173/src/scenes/BootScene.js)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\ross_\\\\Documents\\\\www\\\\games\\\\paccat\" -Recurse -File)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)"
     ]
   }
 }

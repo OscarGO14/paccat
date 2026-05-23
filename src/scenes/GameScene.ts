@@ -1,11 +1,14 @@
 import Phaser from 'phaser';
-import { TILE, MAZE, MAZE_COLS, MAZE_ROWS, COLORS, POWER_TILES, POWER_DURATION } from '../config';
+import { TILE, MAZE_COLS, MAZE_ROWS, COLORS, POWER_DURATION, LEVELS } from '../config';
 import { Cat } from '../entities/Cat';
 import { Vacuum } from '../entities/Vacuum';
 import type { Direction, Skin, VacuumKind } from '../types';
 
 export class GameScene extends Phaser.Scene {
   private grid: string[] = [];
+  private levelMaze: string[] = [];
+  private levelPowerTiles = new Set<string>();
+  private currentLevel = 0;
   private cat!: Cat;
   private vacuum!: Vacuum;
   private vacSpawnX = 7;
@@ -18,6 +21,7 @@ export class GameScene extends Phaser.Scene {
   private touchStart?: { x: number; y: number };
   private powerMode = false;
   private powerTimer = 0;
+  private _fullReset = false;
 
   constructor() { super('Game'); }
 
@@ -27,7 +31,12 @@ export class GameScene extends Phaser.Scene {
     this.powerTimer = 0;
     this.foodTiles.clear();
     this.cameras.main.setBackgroundColor(COLORS.bg);
-    this.grid = MAZE.slice();
+
+    this.currentLevel = (this.registry.get('level') as number) ?? 0;
+    const lvl = LEVELS[Math.min(this.currentLevel, LEVELS.length - 1)];
+    this.levelMaze = lvl.maze;
+    this.levelPowerTiles = lvl.powerTiles;
+    this.grid = this.levelMaze.slice();
 
     this.buildMaze();
 
@@ -35,7 +44,7 @@ export class GameScene extends Phaser.Scene {
     this.vacSpawnX = 7; this.vacSpawnY = 7;
     for (let y = 0; y < MAZE_ROWS; y++) {
       for (let x = 0; x < MAZE_COLS; x++) {
-        const c = MAZE[y][x];
+        const c = this.levelMaze[y][x];
         if (c === 'P') { pX = x; pY = y; }
         if (c === 'V') { this.vacSpawnX = x; this.vacSpawnY = y; }
       }
@@ -50,7 +59,7 @@ export class GameScene extends Phaser.Scene {
     this.wasd = this.input.keyboard!.addKeys({ up: 'W', down: 'S', left: 'A', right: 'D' }) as never;
 
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
-      if (this.over) { this.restart(); return; }
+      if (this.over) { this.restart(this._fullReset); return; }
       this.touchStart = { x: p.x, y: p.y };
     });
     this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
@@ -71,14 +80,14 @@ export class GameScene extends Phaser.Scene {
   private buildMaze() {
     for (let y = 0; y < MAZE_ROWS; y++) {
       for (let x = 0; x < MAZE_COLS; x++) {
-        const c = MAZE[y][x];
+        const c = this.levelMaze[y][x];
         const px = x * TILE + TILE / 2;
         const py = y * TILE + TILE / 2;
         if (c === '#') {
           this.add.image(px, py, 'wall');
         } else if (c === '.' || c === 'P') {
           const key = `${x},${y}`;
-          const isPower = POWER_TILES.has(key);
+          const isPower = this.levelPowerTiles.has(key);
           const food = this.add.image(px, py, isPower ? 'food-power' : 'food');
           this.foodTiles.set(key, food);
         }
@@ -109,7 +118,7 @@ export class GameScene extends Phaser.Scene {
     if (food) {
       food.destroy();
       this.foodTiles.delete(key);
-      const isPower = POWER_TILES.has(key);
+      const isPower = this.levelPowerTiles.has(key);
       const earned = isPower ? 50 : 10;
       if (isPower) this.activatePowerMode();
       const score = (this.registry.get('score') as number) + earned;
@@ -162,7 +171,11 @@ export class GameScene extends Phaser.Scene {
 
   private win() {
     this.over = true;
-    this.showOverlay('¡Ganaste!', '#b6ff5e');
+    if (this.currentLevel + 1 < LEVELS.length) {
+      this.time.delayedCall(600, () => this.scene.start('Transition'));
+    } else {
+      this.showOverlay('¡Ganaste Todo!', '#b6ff5e', true);
+    }
   }
 
   private lose() {
@@ -170,7 +183,8 @@ export class GameScene extends Phaser.Scene {
     this.showOverlay('Game Over', '#ff6fa8');
   }
 
-  private showOverlay(title: string, color: string) {
+  private showOverlay(title: string, color: string, fullReset = false) {
+    this._fullReset = fullReset;
     const w = MAZE_COLS * TILE;
     const h = MAZE_ROWS * TILE;
     const bg = this.add.rectangle(0, 0, w, h, 0x1c1330, 0.8).setOrigin(0);
@@ -187,10 +201,11 @@ export class GameScene extends Phaser.Scene {
     }).setOrigin(0.5);
     this.overlay = this.add.container(0, 0, [bg, t1, t2]).setDepth(100);
 
-    this.input.keyboard!.once('keydown-SPACE', () => this.restart());
+    this.input.keyboard!.once('keydown-SPACE', () => this.restart(fullReset));
   }
 
-  private restart() {
+  private restart(fullReset = false) {
+    if (fullReset) this.registry.set('level', 0);
     this.overlay?.destroy();
     this.scene.restart();
   }

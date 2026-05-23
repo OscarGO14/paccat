@@ -1,0 +1,8 @@
+{
+  "name": "maze-plugin",
+  "description": "Tools for designing, editing, and validating game mazes. Includes a maze editor skill, chrome-devtools MCP for browser validation, and a game designer agent for brainstorming levels and enemies.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Oscargo14"
+  }
+}
